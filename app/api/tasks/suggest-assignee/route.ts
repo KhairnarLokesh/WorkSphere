@@ -9,8 +9,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
         }
 
-        // Return empty suggestions as we removed Firebase
-        // Supabase query logic will replace this later
+        // TODO: Replace with Supabase queries to fetch real users and tasks
         const suggestions = await getAISuggestions(
             [], // mocked users
             [], // mocked active tasks

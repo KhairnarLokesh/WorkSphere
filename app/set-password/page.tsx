@@ -22,7 +22,7 @@ function SetPasswordForm() {
         if (password !== confirm) { setError('Passwords do not match.'); return }
         setStatus('loading')
 
-        // Mock success without Firebase
+        // Mock success — Supabase auth will replace this
         setTimeout(() => {
             setStatus('success')
             setTimeout(() => router.push('/login'), 2000)

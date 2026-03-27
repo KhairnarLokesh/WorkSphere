@@ -34,7 +34,7 @@ export default function EmployeeSkillsCard() {
         const capacityNum = Number(capacity) || 40
 
         // Update local store so the UI reflects globally
-        // We will sync this to Firebase in a future update
+        // We will sync this to Supabase in a future update
         setCurrentUser({
             ...currentUser,
             skills: skillsArray,

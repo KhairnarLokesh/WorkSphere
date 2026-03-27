@@ -1,6 +1,6 @@
 # Enterprise Performance Management Platform
 
-A comprehensive Next.js and Firebase-powered platform for managing industry performance, team collaboration, and organizational resources with role-based access control.
+A comprehensive Next.js and Supabase-powered platform for managing industry performance, team collaboration, and organizational resources with role-based access control. The app uses Zustand stores for state management and custom React hooks for data fetching. Supabase queries are executed automatically when components mount.
 
 ## Features
 
@@ -31,8 +31,9 @@ A comprehensive Next.js and Firebase-powered platform for managing industry perf
 
 - **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
-- **Database**: Firebase Firestore
-- **Storage**: Firebase Storage
+- **Database**: Supabase (PostgreSQL)
+- **Auth**: Supabase Auth
+- **Storage**: Supabase Storage
 - **State Management**: Zustand
 - **UI Components**: shadcn/ui
 - **Styling**: Tailwind CSS
@@ -43,7 +44,7 @@ A comprehensive Next.js and Firebase-powered platform for managing industry perf
 
 ### Prerequisites
 - Node.js 18+
-- Firebase project with Firestore enabled
+- Supabase project (create one at [supabase.com](https://supabase.com))
 - pnpm package manager
 
 ### Installation
@@ -58,14 +59,11 @@ pnpm install
 cp .env.example .env.local
 ```
 
-Add your Firebase credentials to `.env.local`:
+Add your Supabase credentials to `.env.local`:
 ```
-NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 ```
 
 3. **Run development server**
@@ -73,8 +71,8 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 pnpm dev
 ```
 
-4. **Set up Firestore collections**
-See [FIRESTORE_SETUP.md](./FIRESTORE_SETUP.md) for detailed database schema and setup instructions.
+4. **Set up Supabase database**
+See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) for detailed database schema and setup instructions.
 
 ## Project Structure
 
@@ -112,18 +110,21 @@ src/
 │   │   └── admin/
 │   └── ui/
 ├── lib/
-│   ├── firebase.ts
+│   ├── supabase/
+│   │   ├── client.ts
+│   │   ├── server.ts
+│   │   └── admin.ts
 │   ├── store.ts
 │   ├── rbac.ts
 │   ├── models.ts
 │   ├── services/
-│   │   ├── firestore.ts
+│   │   ├── kpi.ts
+│   │   ├── mail.ts
 │   │   └── notifications.ts
 │   ├── hooks/
 │   │   ├── useProjects.ts
 │   │   ├── useTasks.ts
-│   │   ├── useAssets.ts
-│   │   ├── useFirestoreListener.ts
+│   │   └── useAssets.ts
 │   ├── utils/
 │   │   ├── analytics.ts
 │   │   ├── csv.ts
@@ -198,7 +199,7 @@ src/
 
 ## API Reference
 
-### Firestore Service (`lib/services/firestore.ts`)
+### Supabase Data Layer
 
 #### User Operations
 ```typescript
@@ -225,7 +226,7 @@ createTask(taskData: Partial<Task>): Promise<string>
 updateTask(taskId: string, updates: Partial<Task>): Promise<void>
 ```
 
-See [FIRESTORE_SETUP.md](./FIRESTORE_SETUP.md) for complete API documentation.
+See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) for complete API documentation.
 
 ## State Management
 
@@ -265,12 +266,7 @@ const { tasks, loading, error } = useTasksByAssignee(userId)
 const { assets, loading, error } = useAssets(companyId)
 ```
 
-### useFirestoreListener
-```typescript
-const { data, loading, error } = useFirestoreListener<TaskType>('tasks', [
-  where('projectId', '==', projectId)
-])
-```
+All hooks use the Supabase client internally to query the PostgreSQL database and return typed data.
 
 ## Role Access Control
 
@@ -321,7 +317,7 @@ Deploy to Vercel:
 
 ## Documentation
 
-- [Firestore Setup Guide](./FIRESTORE_SETUP.md) - Database schema and security rules
+- [Supabase Setup Guide](./SUPABASE_SETUP.md) - Database schema and RLS policies
 - [Component Documentation](./COMPONENT_DOCS.md) - UI component usage
 - [API Reference](./API_REFERENCE.md) - Detailed API documentation
 

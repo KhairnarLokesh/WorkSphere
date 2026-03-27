@@ -61,8 +61,6 @@ export default function UserManagement() {
     fetchUsers()
   }, [currentUser?.companyId])
 
-  // Mock setup instead of live firestore data for now
-
   const getInitials = (name?: string) => {
     if (!name) return '?'
     return name.split(' ').map((n) => n[0]).filter(Boolean).join('').toUpperCase().slice(0, 2)

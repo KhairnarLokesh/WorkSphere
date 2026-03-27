@@ -38,7 +38,7 @@ export const notificationService = {
 
 export async function sendNotification(notification: Omit<Notification, 'id' | 'createdAt'>) {
   try {
-    // In production, send to Firestore
+    // In production, send to Supabase
     notificationService.info(notification.message, notification.title)
     return true
   } catch (error) {
@@ -49,7 +49,7 @@ export async function sendNotification(notification: Omit<Notification, 'id' | '
 
 export async function markNotificationAsRead(notificationId: string) {
   try {
-    // In production, update in Firestore
+    // In production, update in Supabase
     return true
   } catch (error) {
     console.error('Failed to mark notification as read:', error)
